@@ -67,12 +67,12 @@ getCitationCounts (PMIDs pmids) = do
 type API = "citations" :> ReqBody '[JSON] PMIDs :> Post '[JSON] [Pub]
       :<|> Raw
 
-server :: Server API
-server = liftIO . getCitationCounts :<|> serveDirectoryWebApp "www"
+server :: FilePath -> Server API
+server fp = liftIO . getCitationCounts :<|> serveDirectoryWebApp fp
 
 main :: IO ()
 main = do
   args <- getArgs
   case args of
-    [portStr] | Just port <- readMaybe portStr -> run port $ serve (Servant.Proxy :: Servant.Proxy API) server
+    [portStr, wwwPath] | Just port <- readMaybe portStr -> run port $ serve (Servant.Proxy :: Servant.Proxy API) (server wwwPath)
     _                                          -> error "please specify a port as argument"
