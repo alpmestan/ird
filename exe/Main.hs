@@ -68,7 +68,7 @@ type API = "citations" :> ReqBody '[JSON] PMIDs :> Post '[JSON] [Pub]
       :<|> Raw
 
 server :: FilePath -> Server API
-server fp = liftIO . getCitationCounts :<|> serveDirectoryWebApp fp
+server fp = liftIO . getCitationCounts :<|> serveDirectoryFileServer fp
 
 main :: IO ()
 main = do
