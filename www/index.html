@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Pubmed citation counts</title>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <form id="mainform">
+<textarea class="form-control" rows=10 cols=50 name="q" id="q" placeholder="pmid1 pmid2 ...">
+</textarea>
+<br />
+<input class="btn btn-primary" type="button" value="Get citation counts" onclick="getCitations()"" />
+</form>
+<hr />
+<table class="table table=hover table-bordered">
+    <thead>
+        <td>PMID</td>
+        <td>Title</td>
+        <td>Venue</td>
+        <td>Citations</td>
+    </thead>
+    <tbody id="results">
+
+    </tbody>
+</table>
+</div>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+<script type="text/javascript">
+var form = document.getElementById('mainform');
+function getCitations(event){
+    var xhr = new XMLHttpRequest();
+    var formData = new FormData(form);
+    //open the request
+    xhr.open('POST','/citations')
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    //send the form data
+    console.log(formData);
+    xhr.send(JSON.stringify(formData.get("q")));
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            form.reset(); //reset form after AJAX success or do something else
+            console.log(xhr.response);
+            var counts = JSON.parse(xhr.response);
+            var res = document.getElementById("results");
+            res.innerHTML = '';
+            for(const obj of counts) {
+                console.log(obj);
+                res.innerHTML += "<tr><td>" + obj.pmid.toString()
+                               + "</td><td>" + obj.meta.title
+                               + "</td><td>" + obj.meta.venue
+                               + "</td><td>" + obj.count.toString()
+                               + "</td></tr>";
+            }
+        }
+    }
+    //Fail the onsubmit to avoid page refresh.
+    return false; 
+}
+</script>
+</body>
+</html>
