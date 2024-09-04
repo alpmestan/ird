@@ -24,3 +24,4 @@ executable publis
     build-depends:    async, base, containers, servant-server, text, bytestring, wreq, aeson, lens-aeson, lens, scientific, wai, warp
     hs-source-dirs:   exe
     default-language: GHC2021
+    ghc-options: -threaded -O2
