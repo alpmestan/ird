@@ -19,6 +19,7 @@ import Text.Read (readMaybe)
 import GHC.Generics (Generic)
 import Data.List (intercalate)
 import Data.Maybe (fromMaybe)
+import System.Environment (getArgs)
 
 type PMID = Integer
 type Metadata = Object
@@ -70,4 +71,8 @@ server :: Server API
 server = liftIO . getCitationCounts :<|> serveDirectoryWebApp "www"
 
 main :: IO ()
-main = run 8080 $ serve (Servant.Proxy :: Servant.Proxy API) server
+main = do
+  args <- getArgs
+  case args of
+    [portStr] | Just port <- readMaybe portStr -> run port $ serve (Servant.Proxy :: Servant.Proxy API) server
+    _                                          -> error "please specify a port as argument"
