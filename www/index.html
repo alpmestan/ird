@@ -41,7 +41,7 @@
 <script type="text/javascript">
 var form = document.getElementById('mainform');
 function getCitations(event){
-    document.getElementById('#dl').innerHTML = '';
+    document.getElementById('dl').innerHTML = '';
     var xhr = new XMLHttpRequest();
     var formData = new FormData(form);
     //open the request
@@ -84,7 +84,6 @@ function getCitations(event){
 // Quick and simple export target #table_id into a csv
 function gen_csv_link(table_id, separator = ',') {
     var dl = document.getElementById("dl");
-    dl.innerHTML = '';
     // Select rows from table_id
     var rows = document.querySelectorAll('tabley#' + table_id + ' thead, tr');
     // Construct csv
@@ -110,7 +109,6 @@ function gen_csv_link(table_id, separator = ',') {
     link.setAttribute('download', filename);
     link.setAttribute('class', 'btn btn-success');
     link.innerText = 'Download CSV';
-    var dl = document.getElementById("dl");
     dl.appendChild(link);
 }
 </script>
