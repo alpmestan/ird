@@ -21,7 +21,7 @@ executable publis
     main-is:          Main.hs
     -- other-modules:
     -- other-extensions:
-    build-depends:    async, base, containers, servant-server, text, bytestring, wreq, aeson, lens-aeson, lens, scientific, wai, warp
+    build-depends:    async, base, containers, html-parse, html-parse-lens, servant-server, text, bytestring, wreq, aeson, lens-aeson, lens, scientific, wai, warp
     hs-source-dirs:   exe
     default-language: GHC2021
     ghc-options: -threaded -O2
